@@ -17,7 +17,7 @@ public class polineService {
 
     public String consultar(Polineuropatia param) {
         String rpta = "";
-        // we need those for creating new instances later
+
         final Attribute attribute_Edad = new Attribute("Edad");
         final Attribute attribute_Genero = new Attribute("Genero");
         final Attribute attribute_flgCovid = new Attribute("flgCovid");
@@ -45,7 +45,7 @@ public class polineService {
                 add("NO");
             }
         };
-        // Instances(...) requires ArrayList<> instead of List<>...
+
         ArrayList<Attribute> attributeList = new ArrayList<Attribute>(2) {
             {
                 add(attribute_Edad);
@@ -72,13 +72,12 @@ public class polineService {
                 add(attributeClass);
             }
         };
-        // unpredicted data sets (reference to sample structure for new instances)
+
         Instances dataUnpredicted = new Instances("TestInstances",
                 attributeList, 1);
-        // last feature is target variable
+
         dataUnpredicted.setClassIndex(dataUnpredicted.numAttributes() - 1);
 
-        // create new instance: this one should fall into the setosa domain
         DenseInstance newInstance = new DenseInstance(dataUnpredicted.numAttributes()) {
             {
                 setValue(attribute_Edad,param.getEdad());
@@ -103,9 +102,8 @@ public class polineService {
                 setValue(attribute_Amp_Needle_3_izq,param.getAmp_Needle_3_izq());
             }
         };
-        // reference to dataset
         newInstance.setDataset(dataUnpredicted);
-        // import ready trained model
+
         Classifier cls = null;
         LibSVM wekaClassifier = new LibSVM();
         try {
@@ -121,7 +119,6 @@ public class polineService {
         if (cls == null)
             return "null";
 
-        // predict new sample
         try {
             double result = cls.classifyInstance(newInstance);
             rpta = classes.get(new Double(result).intValue());
